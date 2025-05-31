@@ -1,0 +1,31 @@
+name: Terraform Deploy #워크플로우 이름
+# main 브랜치에 push가 발생하면 아래 워크플로우가 자동으로 실행
+# 코드를 main에 푸시하면 Terraform이 실행
+on:
+    push:
+        branches:
+            - main
+# terraform 이라는 이름의 작업을 실행
+# Ubuntu 최신 버전 환경에서 동작
+jobs:
+    terraform:
+        name: 'Terraform Plan'
+        runs-on: ubuntu-latest
+    
+    steps:
+        - name: Checkout code
+         uses: actions/checkout@v3
+
+        - name: Setup Terraform
+         uses: hashicorp/setup-terraform@v3
+        
+        - name: Terraform Init
+         run : terraform plan
+
+        - name: Terraform Plan
+         run: terraform plan
+         env:
+            AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+            AWS_SCRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+
+
