@@ -81,7 +81,7 @@ resource "aws_security_group" "jenkins_sg" {
 
 # Jenkins EC2 in Public Subnet
 resource "aws_instance" "jenkins" {
-    ami = var.ami_id
+    ami = data.aws_ssm_parameter.amazon_linux_2.value
     instance_type = var.instance_type
     subnet_id = aws_subnet.public.id
     vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
