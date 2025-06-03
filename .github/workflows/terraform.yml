@@ -4,8 +4,11 @@ name: Terraform Deploy #워크플로우 이름
 # .github/workflows/terraform.yml
 
 # .github/workflows/terraform.yml
+# .github/workflows/terraform.yml
 on:
   push:
+    branches:
+      - main  # main 브랜치에 push될 때만 apply
     paths:
       - '**.tf'
       - '**/terraform.*'
@@ -13,7 +16,7 @@ on:
 
 jobs:
   terraform:
-    name: Terraform Init and Plan
+    name: Terraform Init, Plan and Apply
     runs-on: ubuntu-latest
 
     env:
@@ -22,13 +25,13 @@ jobs:
       AWS_DEFAULT_REGION: ap-northeast-2
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Terraform
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.10.5 
+          terraform_version: 1.10.5
 
       - name: Terraform Init
         run: terraform init -input=false
@@ -37,5 +40,10 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -input=false
+        run: terraform plan -out=tfplan -input=false
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve tfplan
+
 
