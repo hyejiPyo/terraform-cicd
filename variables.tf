@@ -15,12 +15,12 @@ variable "private_subnet_cidr" {
 }
 
 variable "availability_zone" {
-    default = "ap-northeast-2a"
+    default = "ap-northeast-2c"
 }
 
 variable "ami_id" {
     description = "Amazon Linux 2 AMI ID"
-    default = 
+    default = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
 }
 
 variable "instance_type" {
